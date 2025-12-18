@@ -84,7 +84,7 @@
       const params = new URLSearchParams(hash);
       
       const type = params.get('type');
-      const error = params.get('error_description'); // error_description is common for some flows
+      const error = params.get('error_description') || params.get('error'); // error_description is common for some flows
       const accessToken = params.get('access_token');
       
       const titleEl = document.getElementById('title');
