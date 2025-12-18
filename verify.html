@@ -79,9 +79,12 @@
     <p id="message">Please wait while we confirm your account.</p>
     
     <script>
-      const params = new URLSearchParams(window.location.search);
+      // Parse parameters from the URL hash fragment (e.g., #access_token=...&type=signup&error_description=...)
+      const hash = window.location.hash.substring(1); // Remove the leading '#'
+      const params = new URLSearchParams(hash);
+      
       const type = params.get('type');
-      const error = params.get('error');
+      const error = params.get('error') || params.get('error_description'); // error_description is common for some flows
       const accessToken = params.get('access_token');
       
       const titleEl = document.getElementById('title');
@@ -99,6 +102,11 @@
       } else if (type === 'recovery') {
         titleEl.textContent = 'Password Reset Link Valid';
         messageEl.textContent = 'You can now return to the app to reset your password.';
+        const button = document.createElement('a');
+        button.href = 'astralbliss://';
+        button.className = 'open-app';
+        button.textContent = 'Open AstralBliss App';
+        messageEl.insertAdjacentElement('afterend', button);
       } else if (error) {
         titleEl.textContent = 'Verification Failed';
         messageEl.innerHTML = `An error occurred: <strong>${error}</strong>.<br>Please try the link again or request a new verification email.`;
